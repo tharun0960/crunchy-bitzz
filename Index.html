@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Crunchy Bites — bold snacks made for sharing." />
+    <title>Crunchy Bites</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="Untitled-1.css" />
+    <style>
+      body { margin: 0; min-width: 320px; }
+      a { color: inherit; text-decoration: none; }
+      button { border: 0; cursor: pointer; font: inherit; }
+      .page { overflow: hidden; }
+      .shell { width: min(1120px, calc(100% - 2rem)); margin: auto; }
+      #site-nav { position: sticky; top: 0; z-index: 10; background: rgba(13,13,13,.88); }
+      .nav-inner { min-height: 74px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+      .brand { color: var(--gold); font-family: var(--font-display); font-weight: 800; letter-spacing: -.07em; font-size: 1.25rem; }
+      .nav-links { display: flex; gap: 1.25rem; font-size: .9rem; }
+      .hero { position: relative; padding: 7rem 0 5rem; background: radial-gradient(circle at 80% 25%, rgba(155,17,30,.45), transparent 31rem), var(--black); }
+      .hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; align-items: center; gap: 3rem; }
+      h1 { font-size: clamp(3rem, 7vw, 6.25rem); line-height: .97; letter-spacing: -.08em; max-width: 760px; margin: .6rem 0 1.5rem; }
+      .lead { color: var(--muted); max-width: 36rem; font-size: 1.1rem; line-height: 1.6; margin-bottom: 2rem; }
+      .actions { display: flex; flex-wrap: wrap; gap: .8rem; }
+      .hero-art { aspect-ratio: 1; max-width: 420px; margin: auto; display: grid; place-items: center; border-radius: 50%; background: radial-gradient(circle at 35% 30%, var(--gold-soft), var(--orange) 35%, var(--red) 68%, #35060b 100%); box-shadow: 0 0 100px rgba(201,32,58,.35); }
+      .hero-art span { width: 58%; aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%; background: #f0bd4f; color: var(--black); font-size: clamp(4rem, 10vw, 7rem); box-shadow: inset -20px -20px 0 rgba(130,61,0,.2); }
+      .section { padding: 5rem 0; }
+      .section h2 { margin: .45rem 0 2rem; font-size: clamp(2rem, 4vw, 3.3rem); letter-spacing: -.06em; }
+      .menu { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+      .food-img-wrap { height: 170px; display: grid; place-items: center; font-size: 4.5rem; background: linear-gradient(135deg, #4a0d15, #160f10); }
+      .food-info { padding: 1.35rem; }
+      .food-info h3 { margin: 0 0 .5rem; }
+      .food-info p { color: var(--muted); line-height: 1.5; margin: 0 0 1rem; }
+      .price { display: flex; align-items: center; justify-content: space-between; color: var(--gold); font-weight: 700; }
+      .price button { padding: .55rem .8rem; border-radius: 999px; background: var(--gold); color: var(--black); font-weight: 700; }
+      .banner { padding: 3rem; text-align: center; border-radius: var(--radius-lg); background: linear-gradient(120deg, #650c18, #210d11); }
+      .banner h2 { margin: 0 0 1.4rem; }
+      footer { padding: 2rem 0; color: var(--muted); text-align: center; border-top: 1px solid rgba(212,175,55,.14); }
+      @media (max-width: 720px) { .nav-links { display: none; } .hero { padding-top: 4rem; } .hero-grid { grid-template-columns: 1fr; } .hero-art { max-width: 290px; } .menu { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body class="grain">
+    <div class="page">
+      <nav id="site-nav" class="glass-solid"><div class="shell nav-inner"><a class="brand" href="#top">CRUNCHY BITES</a><div class="nav-links"><a class="nav-link active" href="#top">Home</a><a class="nav-link" href="#menu">Menu</a><a class="nav-link" href="#about">Our story</a></div><a class="btn btn-gold bite-corner" href="#menu">Order now</a></div></nav>
+      <main id="top">
+        <section class="hero"><div class="shell hero-grid"><div class="hero-fade"><p class="section-eyebrow">Big flavour. Serious crunch.</p><h1>Snacks that make <span class="shimmer-text">noise.</span></h1><p class="lead">Bold, irresistibly crunchy bites crafted for movie nights, lunch breaks, and every hungry moment in between.</p><div class="actions"><a class="btn btn-primary bite-corner" href="#menu">Explore the menu →</a><a class="btn btn-ghost" href="#about">Our story</a></div></div><div class="hero-art float-2" aria-label="A crunchy golden snack" role="img"><span>🍪</span></div></div></section>
+        <section id="menu" class="section"><div class="shell"><p class="section-eyebrow">Fan favourites</p><h2>Pick your crunch.</h2><div class="menu"><article class="food-card"><div class="food-img-wrap">🌶️</div><div class="food-info"><h3>Firecracker Chips</h3><p>Smoky chilli heat with a bright lime finish.</p><div class="price"><span>₹99</span><button type="button" aria-label="Add Firecracker Chips">Add +</button></div></div></article><article class="food-card"><div class="food-img-wrap">🧀</div><div class="food-info"><h3>Cheese Storm</h3><p>Cheddar-rich, wildly crunchy, impossible to share.</p><div class="price"><span>₹109</span><button type="button" aria-label="Add Cheese Storm">Add +</button></div></div></article><article class="food-card"><div class="food-img-wrap">🍯</div><div class="food-info"><h3>Honey Heat</h3><p>Sweet honey, slow warmth, and a golden crunch.</p><div class="price"><span>₹119</span><button type="button" aria-label="Add Honey Heat">Add +</button></div></div></article></div></div></section>
+        <section id="about" class="section"><div class="shell banner combo-glow"><p class="section-eyebrow">Made for moments</p><h2>More crunch. More smiles.</h2><a class="btn btn-gold bite-corner" href="mailto:hello@crunchybites.example">Say hello</a></div></section>
+      </main>
+      <footer><div class="shell">© 2026 Crunchy Bites. Made with a little extra crunch.</div></footer>
+    </div>
+  </body>
