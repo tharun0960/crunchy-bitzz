@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crunchy Bites | Restaurant Menu</title>
+    <style>
+      :root {
+        --bg: #0f0b09;
+        --panel: rgba(255, 255, 255, 0.08);
+        --panel-strong: rgba(255, 255, 255, 0.14);
+        --text: #fff7ef;
+        --muted: #f3c6a0;
+        --accent: #ff7a1a;
+        --accent-2: #ff4d6d;
+        --border: rgba(255, 255, 255, 0.16);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(255, 122, 26, 0.22), transparent 30%),
+          linear-gradient(135deg, #1f0f08 0%, #0f0b09 45%, #1b0a08 100%);
+        min-height: 100vh;
+        line-height: 1.6;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .container {
+        width: min(1180px, calc(100% - 2rem));
+        margin: 0 auto;
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        backdrop-filter: blur(16px);
+        background: rgba(15, 11, 9, 0.75);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+        gap: 1rem;
+      }
+
+      .brand {
+        font-size: 1.25rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .nav-links a {
+        color: var(--muted);
+        transition: color 0.2s ease;
+      }
+
+      .nav-links a:hover {
+        color: white;
+      }
+
+      .cart-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.6rem 0.9rem;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--text);
+        cursor: pointer;
+        font-weight: 700;
+      }
+
+      .cart-drawer {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: min(420px, 100%);
+        height: 100vh;
+        background: rgba(15, 11, 9, 0.97);
+        border-left: 1px solid var(--border);
+        box-shadow: -12px 0 30px rgba(0, 0, 0, 0.35);
+        transform: translateX(100%);
+        transition: transform 0.25s ease;
+        z-index: 30;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .cart-drawer.open {
+        transform: translateX(0);
+      }
+
+      .cart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.2rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .cart-body {
+        padding: 1rem 1.2rem 1.2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        overflow-y: auto;
+      }
+
+      .cart-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 1.3rem;
+        height: 1.3rem;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        color: white;
+        font-size: 0.8rem;
+        padding: 0 0.3rem;
+      }
+
+      .hero {
+        padding: 5rem 0 3rem;
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: 1.2fr 0.8fr;
+        align-items: center;
+      }
+
+      .hero h1 {
+        font-size: clamp(2rem, 4vw, 3.4rem);
+        line-height: 1.1;
+        margin-bottom: 1rem;
+      }
+
+      .hero p {
+        color: var(--muted);
+        font-size: 1.05rem;
+        max-width: 650px;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 0.9rem 1.2rem;
+        border-radius: 999px;
+        font-weight: 700;
+        border: 1px solid transparent;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        color: white;
+        box-shadow: 0 10px 24px rgba(255, 122, 26, 0.25);
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: var(--border);
+      }
+
+      .hero-card {
+        padding: 1.5rem;
+        border-radius: 1.5rem;
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+        border: 1px solid var(--border);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+      }
+
+      .hero-media {
+        position: relative;
+        overflow: hidden;
+        border-radius: 1.4rem;
+        border: 1px solid var(--border);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+      }
+
+      .hero-media img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        min-height: 320px;
+        object-fit: cover;
+      }
+
+      .hero-badge {
+        position: absolute;
+        bottom: 1rem;
+        left: 1rem;
+        padding: 0.55rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(15, 11, 9, 0.78);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        color: #ffe8d4;
+        font-size: 0.9rem;
+      }
+
+      .hero-card h2 {
+        margin-bottom: 0.8rem;
+        font-size: 1.2rem;
+      }
+
+      .hero-card ul {
+        list-style: none;
+        display: grid;
+        gap: 0.6rem;
+      }
+
+      .hero-card li {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        color: var(--muted);
+      }
+
+      .section {
+        padding: 2rem 0 1rem;
+      }
+
+      .section-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .section-title h3 {
+        font-size: 1.3rem;
+      }
+
+      .pill {
+        display: inline-block;
+        padding: 0.35rem 0.7rem;
+        border-radius: 999px;
+        background: rgba(255, 122, 26, 0.15);
+        color: #ffd4a8;
+        font-size: 0.85rem;
+        border: 1px solid rgba(255, 122, 26, 0.25);
+      }
+
+      .grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .card {
+        padding: 1.1rem;
+        border-radius: 1rem;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        transition: transform 0.2s ease, border-color 0.2s ease;
+        overflow: hidden;
+      }
+
+      .card:hover {
+        transform: translateY(-3px);
+        border-color: rgba(255, 122, 26, 0.45);
+      }
+
+      .card img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 0.8rem;
+        margin-bottom: 0.8rem;
+      }
+
+      .card h4 {
+        margin-bottom: 0.4rem;
+        font-size: 1rem;
+      }
+
+      .card p {
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .price {
+        display: block;
+        margin-top: 0.6rem;
+        font-weight: 700;
+        color: #ffd7b1;
+      }
+
+      .hero-note {
+        margin-top: 1rem;
+        color: #ffd4a8;
+      }
+
+      .btn-whatsapp {
+        background: linear-gradient(135deg, #25d366, #128c7e);
+        color: white;
+        box-shadow: 0 10px 24px rgba(37, 211, 102, 0.25);
+      }
+
+      .gallery-section {
+        padding: 0.5rem 0 1rem;
+      }
+
+      .gallery-grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .gallery-card {
+        padding: 1rem;
+        border-radius: 1rem;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid var(--border);
+      }
+
+      .gallery-card img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 0.8rem;
+        margin-bottom: 0.8rem;
+      }
+
+      .gallery-card h4 {
+        margin-bottom: 0.3rem;
+      }
+
+      .gallery-card p {
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .contact-card {
+        padding: 1.2rem;
+        border-radius: 1rem;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid var(--border);
+      }
+
+      .order-shell {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: 1.4fr 0.8fr;
+        align-items: start;
+      }
+
+      .order-grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .order-card {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .order-card .price {
+        margin-top: auto;
+      }
+
+      .btn-small {
+        padding: 0.7rem 0.95rem;
+        border-radius: 999px;
+        border: none;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .qty-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .qty-btn {
+        width: 2rem;
+        height: 2rem;
+        border: none;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.12);
+        color: var(--text);
+        cursor: pointer;
+      }
+
+      .qty-input {
+        width: 3rem;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--text);
+        text-align: center;
+        padding: 0.35rem 0;
+      }
+
+      .order-summary {
+        padding: 1.2rem;
+        border-radius: 1rem;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid var(--border);
+        position: sticky;
+        top: 90px;
+      }
+
+      .order-summary h4 {
+        margin-bottom: 0.8rem;
+      }
+
+      .cart-items {
+        display: grid;
+        gap: 0.6rem;
+        margin-bottom: 1rem;
+      }
+
+      .cart-item {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .cart-empty {
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin: 0.8rem 0 1rem;
+        font-weight: 700;
+      }
+
+      .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      footer {
+        padding: 2.5rem 0 3rem;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      @media (max-width: 900px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+
+        .grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .gallery-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 900px) {
+        .order-shell {
+          grid-template-columns: 1fr;
+        }
+
+        .order-summary {
+          position: static;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .order-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .nav {
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container nav">
+        <a class="brand" href="#top">Crunchy Bites</a>
+        <nav class="nav-links">
+          <a href="#combos">Combos</a>
+          <a href="#pizza">Pizza</a>
+          <a href="#burgers">Burgers</a>
+          <a href="#sweets">Ice Creams & Shakes</a>
+          <a href="#location">Location</a>
+        </nav>
+        <button class="cart-button" id="headerCartButton" type="button">
+          <span>🛒</span>
+          <span class="cart-pill" id="headerCartCount">0</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="cart-drawer" id="cartDrawer" aria-hidden="true">
+      <div class="cart-header">
+        <h3>Your Cart</h3>
+        <button class="btn-small btn-secondary" id="closeCartBtn" type="button">Close</button>
+      </div>
+      <div class="cart-body">
+        <div id="drawerCartItems" class="cart-items"></div>
+        <div class="summary-row">
+          <span>Total</span>
+          <strong id="drawerCartTotal">₹0</strong>
+        </div>
+        <button id="drawerCheckoutBtn" class="btn btn-whatsapp" type="button" disabled>Checkout on WhatsApp</button>
+      </div>
+    </div>
+
+    <main id="top">
+      <section class="container hero">
+        <div>
+          <span class="pill">Freshly prepared • Fast delivery • Family favorites</span>
+          <h1>Crunchy bites, bold flavors, and comfort food made for every craving.</h1>
+          <p>From cheesy pizzas and crispy burgers to creamy shakes and cool mocktails, Crunchy Bites brings together the most satisfying comfort food in one vibrant menu.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#full-menu">Explore Menu</a>
+            <a class="btn btn-secondary" href="https://maps.app.goo.gl/6pnhWCDVkd5TYqrn7" target="_blank" rel="noreferrer">Get Directions</a>
+            <a class="btn btn-whatsapp" href="https://wa.me/918885323499?text=Hello%20Crunchy%20Bites%2C%20I%20would%20like%20to%20place%20an%20order." target="_blank" rel="noreferrer">Order on WhatsApp</a>
+          </div>
+          <p class="hero-note">Open daily • Great taste • Value-packed meals • WhatsApp: +91 88853 23499</p>
+        </div>
+
+        <div class="hero-media">
+          <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1200&q=80" alt="Crunchy Bites pizza and sides" />
+          <div class="hero-badge">Freshly baked • Hot & ready</div>
+        </div>
+      </section>
+
+      <section class="container gallery-section">
+        <div class="gallery-grid">
+          <article class="gallery-card">
+            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80" alt="Crispy burger" />
+            <h4>Signature Burgers</h4>
+            <p>Juicy, crispy, and packed with flavor.</p>
+          </article>
+          <article class="gallery-card">
+            <img src="https://images.unsplash.com/photo-1576107232684-2f220e8d9f5d?auto=format&fit=crop&w=900&q=80" alt="Loaded fries" />
+            <h4>Golden Sides</h4>
+            <p>From fries to nuggets, every bite is crunchy.</p>
+          </article>
+          <article class="gallery-card">
+            <img src="https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&w=900&q=80" alt="Milkshake and dessert" />
+            <h4>Cool Treats</h4>
+            <p>Milkshakes and mocktails to complete the meal.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="container section" id="full-menu">
+        <div class="section-title">
+          <h3>Full Menu</h3>
+          <span class="pill">Browse our favorites</span>
+        </div>
+        <div class="grid">
+          <article class="card">
+            <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=900&q=80" alt="Combo meal" />
+            <h4>Combos</h4>
+            <p>Great-value bundles for family meals and sharing.</p>
+            <a class="btn btn-secondary" href="#combos" style="display:inline-block; margin-top:0.8rem;">View Combos</a>
+          </article>
+          <article class="card">
+            <img src="https://images.unsplash.com/photo-1542834369-f10ebf06d3e0?auto=format&fit=crop&w=900&q=80" alt="Pizza spread" />
+            <h4>Pizza</h4>
+            <p>Loaded with cheese, herbs, and bold toppings.</p>
+            <a class="btn btn-secondary" href="#pizza" style="display:inline-block; margin-top:0.8rem;">View Pizzas</a>
+          </article>
+          <article class="card">
+            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80" alt="Burger meal" />
+            <h4>Burgers</h4>
+            <p>Crunchy buns, juicy fillings, and premium toppings.</p>
+            <a class="btn btn-secondary" href="#burgers" style="display:inline-block; margin-top:0.8rem;">View Burgers</a>
+          </article>
+          <article class="card">
+            <img src="https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&w=900&q=80" alt="Milkshake and dessert" />
+            <h4>Ice Creams & Shakes</h4>
+            <p>Cool treats to finish your meal in style.</p>
+            <a class="btn btn-secondary" href="#sweets" style="display:inline-block; margin-top:0.8rem;">View Sweets</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="container section" id="combos">
+        <div class="section-title">
+          <h3>Combos</h3>
+          <span class="pill">Best value meals</span>
+        </div>
+        <div class="grid">
+          <article class="card">
+            <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=900&q=80" alt="Pizza combo platter" />
+            <h4>Combo 1</h4>
+            <p>Veg Cheese Pizza + Veg Cheese Burger + French Fries + Soft Drink</p>
+            <span class="price">₹245</span>
+          </article>
+          <article class="card">
+            <h4>Combo 3</h4>
+            <p>Veg Cheese Pizza + Burger + Fries + Soft Drink</p>
+            <span class="price">₹349</span>
+          </article>
+          <article class="card">
+            <h4>Combo 4</h4>
+            <p>Chicken Cheese Pizza + Chicken Cheese Burger + French Fries + Soft Drink</p>
+            <span class="price">₹220</span>
+          </article>
+          <article class="card">
+            <h4>Combo 6 & 7</h4>
+            <p>Crispy Boneless Strips + Chicken Wings + Chicken Popcorn + Fries + Soft Drink</p>
+            <span class="price">₹340</span>
+          </article>
+          <article class="card">
+            <h4>Combo 8 & 9</h4>
+            <p>Chicken Wings + Crispy Chicken + Boneless Strips + Fries + Soft Drink</p>
+            <span class="price">₹375</span>
+          </article>
+          <article class="card">
+            <h4>Combo 10 & 11</h4>
+            <p>Boneless Strips + Crispy Wings + Crispy Chicken + Soft Drink</p>
+            <span class="price">₹440</span>
+          </article>
+          <article class="card">
+            <h4>Combo 12</h4>
+            <p>Hot Wings + Boneless Strips + Lollypop + Fries + Drink</p>
+            <span class="price">₹399</span>
+          </article>
+          <article class="card">
+            <h4>Combo 13</h4>
+            <p>Burger + French Fries + Potato Nuggets + Paneer Popcorn + Soft Drink</p>
+            <span class="price">₹399</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="container section" id="pizza">
+        <div class="section-title">
+          <h3>Pizza</h3>
+          <span class="pill">Cheesy & loaded</span>
+        </div>
+        <div class="grid">
+          <article class="card">
+            <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=900&q=80" alt="Veg cheese pizza" />
+            <h4>Veg Cheese Pizza</h4>
+            <p>Classic cheese delight with a golden crust.</p>
+            <span class="price">₹189</span>
+          </article>
+          <article class="card">
+            <h4>Cheese Corn Pizza</h4>
+            <p>Sweet corn and extra cheese in every bite.</p>
+            <span class="price">₹175</span>
+          </article>
+          <article class="card">
+            <h4>Paneer Pizza</h4>
+            <p>Rich paneer topping with a perfect blend of spices.</p>
+            <span class="price">₹200</span>
+          </article>
+          <article class="card">
+            <h4>Chicken Cheese Pizza</h4>
+            <p>Juicy chicken with indulgent melted cheese.</p>
+            <span class="price">₹185</span>
+          </article>
+          <article class="card">
+            <h4>Crunchy Bites Spl</h4>
+            <p>A bold flavor-packed pizza for special cravings.</p>
+            <span class="price">₹250</span>
+          </article>
+          <article class="card">
+            <h4>Extra Cheese</h4>
+            <p>Upgrade any pizza with a richer cheese layer.</p>
+            <span class="price">₹40</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="container section" id="burgers">
+        <div class="section-title">
+          <h3>Burgers</h3>
+          <span class="pill">Crispy and satisfying</span>
+        </div>
+        <div class="grid">
+          <article class="card">
+            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80" alt="Veg burger" />
+            <h4>Veg Burger</h4>
+            <p>Classic veg patty served with fresh toppings.</p>
+            <span class="price">₹99</span>
+          </article>
+          <article class="card">
+            <h4>Paneer Burger</h4>
+            <p>Soft paneer patty with savory seasoning.</p>
+            <span class="price">₹110</span>
+          </article>
+          <article class="card">
+            <h4>Chicken Burger</h4>
+            <p>Juicy chicken burger with a crispy finish.</p>
+            <span class="price">₹119</span>
+          </article>
+          <article class="card">
+            <h4>Crunchy Bites Special</h4>
+            <p>Loaded burger with premium toppings.</p>
+            <span class="price">₹149</span>
+          </article>
+          <article class="card">
+            <h4>Extra Cheese</h4>
+            <p>Make any burger extra rich and melty.</p>
+            <span class="price">₹20</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="container section">
+        <div class="section-title">
+          <h3>Snacks & Sides</h3>
+          <span class="pill">Crispy bites</span>
+        </div>
+        <div class="grid">
+          <article class="card">
+            <h4>French Fries</h4>
+            <p>Salted • Garlic • Peri Peri</p>
+            <span class="price">₹80–₹100</span>
+          </article>
+          <article class="card">
+            <h4>Potato Nuggets</h4>
+            <p>Golden fried and snackable.</p>
+            <span class="price">₹89</span>
+          </article>
+          <article class="card">
+            <h4>Paneer Popcorn</h4>
+            <p>Crunchy paneer bites for sharing.</p>
+            <span class="price">₹140</span>
+          </article>
+          <article class="card">
+            <h4>Chicken Nuggets</h4>
+            <p>Perfect as a quick snack or side.</p>
+            <span class="price">₹120</span>
+          </article>
+          <article class="card">
+            <h4>Veg Rolls</h4>
+            <p>Stuffed with fresh filling and spices.</p>
+            <span class="price">₹49</span>
+          </article>
+          <article class="card">
+            <h4>Chicken Rolls</h4>
+            <p>Flavorful rolls with a juicy chicken center.</p>
+            <span class="price">₹69</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="container section" id="sweets">
+        <div class="section-title">
+          <h3>Ice Creams & Shakes</h3>
+          <span class="pill">Cool & creamy</span>
+        </div>
+        <div class="grid">
+          <article class="card">
+            <img src="https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&w=900&q=80" alt="Ice cream sundae" />
+            <h4>Vanilla</h4>
+            <span class="price">₹70</span>
+          </article>
+          <article class="card">
+            <h4>Chocolate</h4>
+            <span class="price">₹80</span>
+          </article>
+          <article class="card">
+            <h4>Butter Scotch</h4>
+            <span class="price">₹70</span>
+          </article>
+          <article class="card">
+            <h4>Black Current</h4>
+            <span class="price">₹110</span>
+          </article>
+          <article class="card">
+            <h4>Milk Shakes</h4>
+            <p>Strawberry, Mango, Oreo, Kitkat and more.</p>
+            <span class="price">₹99–₹120</span>
+          </article>
+          <article class="card">
+            <h4>Mocktails</h4>
+            <p>Mint, Blue Berry, Orange, Mojito and more.</p>
+            <span class="price">₹80</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="container section" id="order">
+        <div class="section-title">
+          <h3>Order from Website</h3>
+          <span class="pill">Pick items and send to WhatsApp</span>
+        </div>
+        <div class="order-shell">
+          <div class="order-grid">
+            <article class="card order-card" data-name="Veg Cheese Pizza" data-price="189">
+              <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=900&q=80" alt="Veg cheese pizza" />
+              <h4>Veg Cheese Pizza</h4>
+              <p>Classic cheese delight with a golden crust.</p>
+              <span class="price">₹189</span>
+              <div class="qty-row">
+                <button class="qty-btn" type="button" data-action="minus">−</button>
+                <input class="qty-input" type="number" min="1" value="1" />
+                <button class="qty-btn" type="button" data-action="plus">+</button>
+              </div>
+              <button class="btn-small btn-primary" type="button">Add to Cart</button>
+            </article>
+            <article class="card order-card" data-name="Chicken Cheese Pizza" data-price="185">
+              <img src="https://images.unsplash.com/photo-1542834369-f10ebf06d3e0?auto=format&fit=crop&w=900&q=80" alt="Chicken cheese pizza" />
+              <h4>Chicken Cheese Pizza</h4>
+              <p>Juicy chicken with indulgent melted cheese.</p>
+              <span class="price">₹185</span>
+              <div class="qty-row">
+                <button class="qty-btn" type="button" data-action="minus">−</button>
+                <input class="qty-input" type="number" min="1" value="1" />
+                <button class="qty-btn" type="button" data-action="plus">+</button>
+              </div>
+              <button class="btn-small btn-primary" type="button">Add to Cart</button>
+            </article>
+            <article class="card order-card" data-name="Veg Burger" data-price="99">
+              <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80" alt="Veg burger" />
+              <h4>Veg Burger</h4>
+              <p>Classic veg patty served with fresh toppings.</p>
+              <span class="price">₹99</span>
+              <div class="qty-row">
+                <button class="qty-btn" type="button" data-action="minus">−</button>
+                <input class="qty-input" type="number" min="1" value="1" />
+                <button class="qty-btn" type="button" data-action="plus">+</button>
+              </div>
+              <button class="btn-small btn-primary" type="button">Add to Cart</button>
+            </article>
+            <article class="card order-card" data-name="Chicken Burger" data-price="119">
+              <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=900&q=80" alt="Chicken burger" />
+              <h4>Chicken Burger</h4>
+              <p>Juicy chicken burger with a crispy finish.</p>
+              <span class="price">₹119</span>
+              <div class="qty-row">
+                <button class="qty-btn" type="button" data-action="minus">−</button>
+                <input class="qty-input" type="number" min="1" value="1" />
+                <button class="qty-btn" type="button" data-action="plus">+</button>
+              </div>
+              <button class="btn-small btn-primary" type="button">Add to Cart</button>
+            </article>
+            <article class="card order-card" data-name="French Fries" data-price="80">
+              <img src="https://images.unsplash.com/photo-1576107232684-2f220e8d9f5d?auto=format&fit=crop&w=900&q=80" alt="French fries" />
+              <h4>French Fries</h4>
+              <p>Salted, Garlic or Peri Peri.</p>
+              <span class="price">₹80</span>
+              <div class="qty-row">
+                <button class="qty-btn" type="button" data-action="minus">−</button>
+                <input class="qty-input" type="number" min="1" value="1" />
+                <button class="qty-btn" type="button" data-action="plus">+</button>
+              </div>
+              <button class="btn-small btn-primary" type="button">Add to Cart</button>
+            </article>
+            <article class="card order-card" data-name="Paneer Popcorn" data-price="140">
+              <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=900&q=80" alt="Paneer popcorn" />
+              <h4>Paneer Popcorn</h4>
+              <p>Crunchy paneer bites for sharing.</p>
+              <span class="price">₹140</span>
+              <div class="qty-row">
+                <button class="qty-btn" type="button" data-action="minus">−</button>
+                <input class="qty-input" type="number" min="1" value="1" />
+                <button class="qty-btn" type="button" data-action="plus">+</button>
+              </div>
+              <button class="btn-small btn-primary" type="button">Add to Cart</button>
+            </article>
+            <article class="card order-card" data-name="Vanilla Ice Cream" data-price="70">
+              <img src="https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&w=900&q=80" alt="Vanilla ice cream" />
+              <h4>Vanilla Ice Cream</h4>
+              <p>Cool and creamy classic flavor.</p>
+              <span class="price">₹70</span>
+              <div class="qty-row">
+                <button class="qty-btn" type="button" data-action="minus">−</button>
+                <input class="qty-input" type="number" min="1" value="1" />
+                <button class="qty-btn" type="button" data-action="plus">+</button>
+              </div>
+              <button class="btn-small btn-primary" type="button">Add to Cart</button>
+            </article>
+            <article class="card order-card" data-name="Milk Shake" data-price="99">
+              <img src="https://images.unsplash.com/photo-1572490122747-3968b4d5fe48?auto=format&fit=crop&w=900&q=80" alt="Milk shake" />
+              <h4>Milk Shake</h4>
+              <p>Strawberry, Mango, Oreo or Kitkat.</p>
+              <span class="price">₹99</span>
+              <div class="qty-row">
+                <button class="qty-btn" type="button" data-action="minus">−</button>
+                <input class="qty-input" type="number" min="1" value="1" />
+                <button class="qty-btn" type="button" data-action="plus">+</button>
+              </div>
+              <button class="btn-small btn-primary" type="button">Add to Cart</button>
+            </article>
+          </div>
+
+          <aside class="order-summary">
+            <h4>Your Order</h4>
+            <div id="cartItems" class="cart-items">
+              <p class="cart-empty">No items selected yet.</p>
+            </div>
+            <div class="summary-row">
+              <span>Total</span>
+              <strong id="cartTotal">₹0</strong>
+            </div>
+            <button id="whatsappOrderBtn" class="btn btn-whatsapp" type="button" disabled>Send Order on WhatsApp</button>
+          </aside>
+        </div>
+      </section>
+
+      <section class="container section" id="location">
+        <div class="section-title">
+          <h3>Visit Us</h3>
+          <span class="pill">Find us on maps</span>
+        </div>
+        <div class="contact-card">
+          <p>Looking for the outlet? Tap the button below to open the location directly in Google Maps and reach us quickly.</p>
+          <div class="hero-actions" style="margin-top: 1rem;">
+            <a class="btn btn-primary" href="https://maps.app.goo.gl/6pnhWCDVkd5TYqrn7" target="_blank" rel="noreferrer">Open in Google Maps</a>
+            <a class="btn btn-whatsapp" href="https://wa.me/918885323499?text=Hello%20Crunchy%20Bites%2C%20I%20would%20like%20to%20place%20an%20order." target="_blank" rel="noreferrer">Message on WhatsApp</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>Crafted with bold colors, warm flavors, and a modern menu layout.</p>
+      </div>
+    </footer>
+
+    <script>
+      const cart = {};
+      const cartItems = document.getElementById("cartItems");
+      const cartTotal = document.getElementById("cartTotal");
+      const orderBtn = document.getElementById("whatsappOrderBtn");
+      const headerCartButton = document.getElementById("headerCartButton");
+      const headerCartCount = document.getElementById("headerCartCount");
+      const cartDrawer = document.getElementById("cartDrawer");
+      const closeCartBtn = document.getElementById("closeCartBtn");
+      const drawerCartItems = document.getElementById("drawerCartItems");
+      const drawerCartTotal = document.getElementById("drawerCartTotal");
+      const drawerCheckoutBtn = document.getElementById("drawerCheckoutBtn");
+
+      headerCartButton.addEventListener("click", () => {
+        cartDrawer.classList.add("open");
+        cartDrawer.setAttribute("aria-hidden", "false");
+        renderCart();
+      });
+
+      closeCartBtn.addEventListener("click", () => {
+        cartDrawer.classList.remove("open");
+        cartDrawer.setAttribute("aria-hidden", "true");
+      });
+
+      document.querySelectorAll(".order-card").forEach((card) => {
+        const input = card.querySelector(".qty-input");
+        card.querySelectorAll(".qty-btn").forEach((button) => {
+          button.addEventListener("click", () => {
+            const delta = button.dataset.action === "plus" ? 1 : -1;
+            const nextValue = Math.max(1, Number(input.value || 1) + delta);
+            input.value = nextValue;
+          });
+        });
+
+        card.querySelector(".btn-small").addEventListener("click", () => {
+          const name = card.dataset.name;
+          const qty = Math.max(1, Number(input.value || 1));
+          cart[name] = (cart[name] || 0) + qty;
+          renderCart();
+        });
+      });
+
+      function formatCurrency(value) {
+        return `₹${value.toLocaleString("en-IN")}`;
+      }
+
+      function updateCartUI() {
+        const totalItems = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
+        headerCartCount.textContent = totalItems;
+      }
+
+      function renderCart() {
+        const entries = Object.entries(cart);
+        const renderItems = (target) => {
+          if (!entries.length) {
+            target.innerHTML = '<p class="cart-empty">No items selected yet.</p>';
+            return;
+          }
+
+          target.innerHTML = entries
+            .map(([name, qty]) => {
+              const card = document.querySelector(`.order-card[data-name="${name}"]`);
+              const price = Number(card?.dataset.price || 0);
+              return `<div class="cart-item"><span>${qty}x ${name}</span><strong>${formatCurrency(price * qty)}</strong></div>`;
+            })
+            .join("");
+        };
+
+        if (!entries.length) {
+          cartItems.innerHTML = '<p class="cart-empty">No items selected yet.</p>';
+          drawerCartItems.innerHTML = '<p class="cart-empty">No items selected yet.</p>';
+          cartTotal.textContent = "₹0";
+          drawerCartTotal.textContent = "₹0";
+          orderBtn.disabled = true;
+          drawerCheckoutBtn.disabled = true;
+          updateCartUI();
+          return;
+        }
+
+        const total = entries.reduce((sum, [name, qty]) => {
+          const card = document.querySelector(`.order-card[data-name="${name}"]`);
+          const price = Number(card?.dataset.price || 0);
+          return sum + price * qty;
+        }, 0);
+
+        renderItems(cartItems);
+        renderItems(drawerCartItems);
+        cartTotal.textContent = formatCurrency(total);
+        drawerCartTotal.textContent = formatCurrency(total);
+        orderBtn.disabled = false;
+        drawerCheckoutBtn.disabled = false;
+        updateCartUI();
+      }
+
+      function sendOrderToWhatsApp() {
+        const entries = Object.entries(cart);
+        if (!entries.length) return;
+
+        const lines = entries.map(([name, qty]) => `${qty}x ${name}`);
+        const total = entries.reduce((sum, [name, qty]) => {
+          const card = document.querySelector(`.order-card[data-name="${name}"]`);
+          const price = Number(card?.dataset.price || 0);
+          return sum + price * qty;
+        }, 0);
+
+        const message = `Hello Crunchy Bites! I would like to order:\n${lines.join("\n")}\n\nTotal: ${formatCurrency(total)}`;
+        const url = `https://wa.me/918885323499?text=${encodeURIComponent(message)}`;
+        const opened = window.open(url, "_blank", "noopener,noreferrer");
+        if (!opened) {
+          window.location.href = url;
+        }
+      }
+
+      orderBtn.addEventListener("click", sendOrderToWhatsApp);
+      drawerCheckoutBtn.addEventListener("click", () => {
+        cartDrawer.classList.remove("open");
+        cartDrawer.setAttribute("aria-hidden", "true");
+        sendOrderToWhatsApp();
+      });
+    </script>
+  </body>
+</html>
